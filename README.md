@@ -1,2 +1,2 @@
-# DSP-Project-1
+# DSP-Project
 Simple process about number detection by DTFM
