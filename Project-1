@@ -1,0 +1,30 @@
+DTFM=[1,2,3,17;4,5,6,18;7,8,9,19;10,0,11,20]; 
+% DTMF信号代表的16个数 *用10表示；#用11表示；ABCD用17，18，19，20表示
+CodeIn=input('Please input signal sequence:\n');% 输入数字字符串儿（数组形式）
+
+fl=[697,770,852,941];% 列频率(低频)
+fh=[1209,1336,1477,1633];% 行频率（高频）
+fs=4000;
+n=0:1:1024;% 为了发声，加长序列 
+f=fs*n/4000;%待定组
+
+for l=1:length(CodeIn)
+d=CodeIn(l);
+for p=1:4
+for q=1:4
+    if DTFM(p,q)==abs(d); break,end % 检测码相符的列号q
+end 
+    if DTFM(p,q)==abs(d); break,end % 检测码相符的行号p 
+end 
+
+x= cos(2*pi*n*fl(p)/fs) + cos(2*pi*n*fh(q)/fs);% 构成双频信号 
+
+sound(x,8000); % 发出声音（真的就是发出话音信号的声音了） 
+pause(0.3)
+X=fft(x);
+subplot(4,3,l);
+plot(f,abs(X));
+axis([0 550 0 1000]);
+xlabel('频率/Hz');ylabel('幅值');title(d);
+
+end
